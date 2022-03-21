@@ -4,19 +4,17 @@ using UnityEngine;
 
 public class StateMachine : MonoBehaviour
 {
- public enum State
+    #region variables
+    public State currentState;
+    public AiMovement aiMovement;
+    #endregion
+    #region states
+    public enum State
     {
         Attack,
         Defence,
         RunAway,
         Patrol
-    }
-    public State currentState;
-    public AiMovement aiMovement;
-    private void Start()
-    {
-        aiMovement = GetComponent<AiMovement>();
-        NextState();
     }
     private void NextState()
     {
@@ -62,9 +60,9 @@ public class StateMachine : MonoBehaviour
         while (currentState == State.Defence)
         {
             yield return new WaitForSecondsRealtime(10);
-            aiMovement.NewWayPoint();
-            aiMovement.NewWayPoint();
-            aiMovement.NewWayPoint();
+            aiMovement.newCoins();
+            aiMovement.newCoins();
+            aiMovement.newCoins();
             currentState = State.Patrol;
             yield return null;
 
@@ -89,7 +87,7 @@ public class StateMachine : MonoBehaviour
         aiMovement.findClosestWayPoint();
         while (currentState == State.Patrol)
         {
-            if (aiMovement.wayPoints.Count<1)
+            if (aiMovement.wayPoints.Count < 1)
             {
                 currentState = State.Defence;
             }
@@ -103,10 +101,20 @@ public class StateMachine : MonoBehaviour
 
                 yield return null;
             }
-           
+
 
         }
         Debug.Log("Patrolling: Exit");
         NextState();
     }
+    #endregion
+  
+  
+    private void Start()
+    {
+        aiMovement = GetComponent<AiMovement>();
+        NextState();
+    }
+
+    
 }

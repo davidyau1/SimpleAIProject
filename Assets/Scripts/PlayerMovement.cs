@@ -4,26 +4,12 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
+    #region variables
     public float speed = 3f;
-    // Start is called before the first frame update
-    void Start()
-    {
 
-    }
+    #endregion
 
-    // Update is called once per frame
-    void Update()
-    {
-        Movement();
-    }
-
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.tag=="coin")
-        {
-            Destroy(collision.gameObject);
-        }
-    }
+    #region methods
     void Movement()
     {
         Vector2 moveDirection = Vector2.zero;
@@ -54,4 +40,25 @@ public class PlayerMovement : MonoBehaviour
 
 
     }
+    #endregion
+    // Start is called before the first frame update
+    void Start()
+    {
+
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        Movement();
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag=="coin")
+        {
+            Destroy(collision.gameObject);
+        }
+    }
+ 
 }

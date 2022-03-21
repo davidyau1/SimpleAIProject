@@ -241,7 +241,7 @@ MonoBehaviour:
   chaseDistanace: 3
   wayPointIndex: 0
   wayPoints: []
-  wayPointPrefab: {fileID: 1527656236}
+  coinPrefab: {fileID: 1527656236}
 --- !u!61 &10646140
 BoxCollider2D:
   m_ObjectHideFlags: 0

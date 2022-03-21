@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class AiMovement : MonoBehaviour
 {
+    #region variables
+
     // Start is called before the first frame update
     public Transform player;
     public float speed = 1.5f;
@@ -12,18 +14,9 @@ public class AiMovement : MonoBehaviour
     public float chaseDistanace = 3f;
     public int wayPointIndex = 0;
     public List<GameObject> wayPoints;
-    public GameObject wayPointPrefab;
-
-    private void Start()
-    {
-        NewWayPoint();
-        NewWayPoint();
-        NewWayPoint();
-
-
-    }
-
-
+    public GameObject coinPrefab;
+    #endregion
+    #region methods
     public bool NoticePlayer()
     {
         return Vector2.Distance(transform.position, player.position) < chaseDistanace;
@@ -33,7 +26,6 @@ public class AiMovement : MonoBehaviour
     {
         if (Vector2.Distance(transform.position, wayPoints[wayPointIndex].transform.position) < minGoalDistance)
         {
-            RemoveCurrentWayPoint();
             wayPointIndex++;
             if (wayPointIndex >= wayPoints.Count)
             {
@@ -58,20 +50,15 @@ public class AiMovement : MonoBehaviour
         AIMoveTowards(wayPoints[wayPointIndex].transform);
         WaypointUpdate();
     }
-    public void NewWayPoint()
+    public void newCoins()
     {
         float x = Random.Range(-5f, 5f);
         float y = Random.Range(-5f, 5f);
 
-        GameObject newPoint = Instantiate(wayPointPrefab, new Vector2(x, y), Quaternion.identity);
+        GameObject newPoint = Instantiate(coinPrefab, new Vector2(x, y), Quaternion.identity);
         wayPoints.Add(newPoint);
     }
-    public void RemoveCurrentWayPoint()
-    {
-        GameObject current = wayPoints[wayPointIndex];
-        wayPoints.Remove(current);
-        Destroy(current);
-    }
+
     public void findClosestWayPoint()
     {
         int nearestIndex = 0;
@@ -87,4 +74,16 @@ public class AiMovement : MonoBehaviour
         }
         wayPointIndex = nearestIndex;
     }
+    #endregion
+    private void Start()
+    {
+        newCoins();
+        newCoins();
+        newCoins();
+
+
+    }
+
+
+  
 }
