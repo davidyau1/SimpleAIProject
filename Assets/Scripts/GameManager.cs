@@ -11,4 +11,8 @@ public class GameManager : MonoBehaviour
     {
         score++;
     }
+    private void Update()
+    {
+        scoreText.text = "Score: " + score;
+    }
 }

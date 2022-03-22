@@ -1,12 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class StateMachine : MonoBehaviour
 {
     #region variables
     public State currentState;
     public AiMovement aiMovement;
+    public Text stateText;
+
     #endregion
     #region states
     public enum State
@@ -37,6 +40,7 @@ public class StateMachine : MonoBehaviour
     private IEnumerator AttackState()
     {
         Debug.Log("Attack: Enter");
+        stateText.text = "AI is in Attack State";
         while (currentState == State.Attack)
         {
             aiMovement.AIMoveTowards(aiMovement.player);
@@ -56,6 +60,8 @@ public class StateMachine : MonoBehaviour
     }
     private IEnumerator DefenceState()
     {
+        stateText.text = "AI is in Defence State";
+
         Debug.Log("Defence: Enter");
         aiMovement.wayPoints = new List<GameObject>();
         aiMovement.findClosestWayPoint();
@@ -87,6 +93,8 @@ public class StateMachine : MonoBehaviour
     }
     private IEnumerator PatrolState()
     {
+        stateText.text = "AI is in Patrol State";
+
         Debug.Log("Patrolling: Enter");
         aiMovement.findClosestWayPoint();
         while (currentState == State.Patrol)
