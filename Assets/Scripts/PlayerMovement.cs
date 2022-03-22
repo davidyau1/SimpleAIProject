@@ -64,7 +64,7 @@ public class PlayerMovement : MonoBehaviour
         if (collision.gameObject.tag=="coin")
         {
             //destroy coin when collision
-            Destroy(collision.gameObject);
+            collision.gameObject.tag = "Finish";
             //increase score
             gameManager.IncreaseScore();
         }

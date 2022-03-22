@@ -45,8 +45,12 @@ public class StateMachine : MonoBehaviour
                 currentState = State.Patrol;
             }
             yield return null;
-
+            if (aiMovement.wayPoints.Count < 1)
+            {
+                currentState = State.Defence;
+            }
         }
+      
         Debug.Log("Attack: Exit");
         NextState();
     }

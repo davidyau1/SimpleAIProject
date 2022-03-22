@@ -38,6 +38,8 @@ public class AiMovement : MonoBehaviour
     }
     public void WaypointUpdate()
     {
+
+     
         if (Vector2.Distance(transform.position, wayPoints[wayPointIndex].transform.position) < minGoalDistance)
         {
             wayPointIndex++;
@@ -77,16 +79,26 @@ public class AiMovement : MonoBehaviour
     {
         int nearestIndex = 0;
         float currentNearest = float.PositiveInfinity;
-        for (int i = 0; i < wayPoints.Count; i++)
+        if (wayPoints.Count<=0)
         {
-            float test = Vector2.Distance(transform.position, wayPoints[i].transform.position);
-            if (currentNearest > test)
-            {
-                nearestIndex = i;
-                currentNearest = test;
-            }
+            //change game state to defensive
         }
-        wayPointIndex = nearestIndex;
+        
+        else
+        {
+            for (int i = 0; i < wayPoints.Count; i++)
+            {
+
+                float test = Vector2.Distance(transform.position, wayPoints[i].transform.position);
+                if (currentNearest > test)
+                {
+                    nearestIndex = i;
+                    currentNearest = test;
+                }
+            }
+            wayPointIndex = nearestIndex;
+        }
+      
     }
     #endregion
     private void Start()
@@ -94,10 +106,39 @@ public class AiMovement : MonoBehaviour
         newCoins();
         newCoins();
         newCoins();
+    }
+    private void Update()
+    {
+        //when player collides changes tag to finished and removes it from array and destory gameObject instance
+        RemoveCollectedWayPoints();
+    }
+    void RemoveCollectedWayPoints()
+    {
+        foreach (var wayPoint in wayPoints)
+        {
+            if (wayPoint.gameObject.tag == "Finish")
+            {
+                //reduce index from one to avoid index to array error
+                if (wayPointIndex!=0)
+                {
+                    wayPointIndex--;
 
+                }
+                //remove from index
 
+                wayPoints.Remove(wayPoint);
+                Destroy(wayPoint);
+
+                //if only one remains
+                if (wayPointIndex>=wayPoints.Count && wayPoints.Count!=0)
+                {
+                    wayPointIndex = 0;
+                }
+            }
+        }
     }
 
 
-  
+
+
 }
