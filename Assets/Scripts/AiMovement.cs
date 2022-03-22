@@ -7,16 +7,30 @@ public class AiMovement : MonoBehaviour
     #region variables
 
     // Start is called before the first frame update
+    //player gameobject
     public Transform player;
+    [Header("AI Values")]
+    [Tooltip("use this to apply behaviour when moving to goals/chasing")]
     public float speed = 1.5f;
     public float noticeWaypoint = 0;
     public float minGoalDistance = 0.05f;
     public float chaseDistanace = 3f;
+    [Header("waypoints")]
+    [Tooltip("waypoints when patrolling")]
     public int wayPointIndex = 0;
     public List<GameObject> wayPoints;
+    //respawn coins when all gone
     public GameObject coinPrefab;
+    public GameManager gameManager;
     #endregion
+
     #region methods
+    private void Awake()
+    {
+        //gets gameplay manager
+        gameManager = GameObject.FindObjectOfType<GameManager>();
+    }
+    //AI behaviour when noticing player
     public bool NoticePlayer()
     {
         return Vector2.Distance(transform.position, player.position) < chaseDistanace;

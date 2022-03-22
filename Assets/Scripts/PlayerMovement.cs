@@ -6,6 +6,7 @@ public class PlayerMovement : MonoBehaviour
 {
     #region variables
     public float speed = 3f;
+    private GameManager gameManager;
 
     #endregion
 
@@ -46,6 +47,11 @@ public class PlayerMovement : MonoBehaviour
     {
 
     }
+    private void Awake()
+    {
+        //gets gameplay manager
+        gameManager = GameObject.FindObjectOfType<GameManager>();
+    }
 
     // Update is called once per frame
     void Update()
@@ -57,7 +63,15 @@ public class PlayerMovement : MonoBehaviour
     {
         if (collision.gameObject.tag=="coin")
         {
+            //destroy coin when collision
             Destroy(collision.gameObject);
+            //increase score
+            gameManager.IncreaseScore();
+        }
+        if (collision.gameObject.tag=="Enemy")
+        {
+            //If collison with enemy game over
+            return;
         }
     }
  
