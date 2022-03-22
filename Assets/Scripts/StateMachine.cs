@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class StateMachine : MonoBehaviour
 {
     #region variables
+    //
     public State currentState;
     public AiMovement aiMovement;
     public Text stateText;
@@ -14,11 +15,12 @@ public class StateMachine : MonoBehaviour
     #region states
     public enum State
     {
+        //the 3 states the AI has
         Attack,
         Defence,
-        RunAway,
         Patrol
     }
+    //changing between states
     private void NextState()
     {
         switch (currentState)
@@ -29,47 +31,52 @@ public class StateMachine : MonoBehaviour
             case State.Defence:
                 StartCoroutine(DefenceState());
                 break;
-            case State.RunAway:
-                StartCoroutine(RunAwayState());
-                break;
             case State.Patrol:
                 StartCoroutine(PatrolState());
                 break;
         }
     }
+
+    //attack state
     private IEnumerator AttackState()
     {
+        //display ai state in ui
         Debug.Log("Attack: Enter");
         stateText.text = "AI is in Attack State";
         while (currentState == State.Attack)
         {
+            //moves towards player
             aiMovement.AIMoveTowards(aiMovement.player);
+
+            //change state to patrol when not chasing player
             if (!aiMovement.NoticePlayer())
             {
                 currentState = State.Patrol;
             }
-            yield return null;
+            //change to defence when no waypoints/coins
             if (aiMovement.wayPoints.Count < 1)
             {
                 currentState = State.Defence;
             }
+            yield return null;
         }
-      
+
         Debug.Log("Attack: Exit");
         NextState();
     }
+
     private IEnumerator DefenceState()
     {
+        //display AI state in UI
         stateText.text = "AI is in Defence State";
 
         Debug.Log("Defence: Enter");
         aiMovement.wayPoints = new List<GameObject>();
         aiMovement.findClosestWayPoint();
-        //runs every frame
-        //sounds like the update
+        //state is defense  wait and spawn new coins/waypoints
         while (currentState == State.Defence)
         {
-            yield return new WaitForSecondsRealtime(10);
+            yield return new WaitForSecondsRealtime(3);
             aiMovement.newCoins();
             aiMovement.newCoins();
             aiMovement.newCoins();
@@ -77,22 +84,15 @@ public class StateMachine : MonoBehaviour
             yield return null;
 
         }
+        //once spawned change state
         Debug.Log("Defence: Exit");
         NextState();
     }
-    private IEnumerator RunAwayState()
-    {
-        Debug.Log("RunAway: Enter");
-        while (currentState == State.RunAway)
-        {
-            Debug.Log("Currently Running Away");
-            yield return null;
-        }
-        Debug.Log("RunAway: Exit");
-        NextState();
-    }
+
     private IEnumerator PatrolState()
     {
+        //display AI state in UI
+
         stateText.text = "AI is in Patrol State";
 
         Debug.Log("Patrolling: Enter");
@@ -101,10 +101,12 @@ public class StateMachine : MonoBehaviour
         {
             if (aiMovement.wayPoints.Count < 1)
             {
+                //when no coins/waypoints change state to defense
                 currentState = State.Defence;
             }
             else
             {
+                //change to attack state when player is noticed by AI
                 aiMovement.WayPointsMovement();
                 if (aiMovement.NoticePlayer())
                 {
@@ -120,13 +122,13 @@ public class StateMachine : MonoBehaviour
         NextState();
     }
     #endregion
-  
-  
+
+
     private void Start()
     {
         aiMovement = GetComponent<AiMovement>();
         NextState();
     }
 
-    
+
 }
