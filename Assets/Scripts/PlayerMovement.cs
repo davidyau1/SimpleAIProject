@@ -66,7 +66,7 @@ public class PlayerMovement : MonoBehaviour
         }
         if (collision.gameObject.tag=="Enemy")
         {
-            //If collison with enemy game over
+            gameManager.GameOver();
             return;
         }
     }
