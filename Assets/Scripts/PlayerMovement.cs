@@ -53,6 +53,11 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
         Movement();
+        if (Input.GetKey("escape"))
+        {
+            Application.Quit();
+            
+        }
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
